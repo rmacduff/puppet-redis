@@ -14,6 +14,9 @@
 # [*redis_install_dir*]
 #   The dir to which the newly built redis binaries are copied. Default value is '/usr/bin'.
 #
+# [*redis_package*]
+#   Install redis as a package.  Defaults to false.
+#
 # [*redis_yum_options*]
 #   Additional options to provide to yum when the redis rpm package is installed.
 #
