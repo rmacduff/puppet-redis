@@ -14,11 +14,15 @@
 # [*redis_install_dir*]
 #   The dir to which the newly built redis binaries are copied. Default value is '/usr/bin'.
 #
+# [*redis_yum_options*]
+#   Additional options to provide to yum when the redis rpm package is installed.
+#
 class redis::install (
   $redis_version     = $::redis::params::redis_version,
   $redis_build_dir   = $::redis::params::redis_build_dir,
   $redis_install_dir = $::redis::params::redis_install_dir,
-  $redis_package     = $::redis::params::redis_install_package
+  $redis_package     = $::redis::params::redis_install_package,
+  $redis_yum_options = $::redis::params::redis_yum_options
 ) inherits redis {
   if ( $redis_package == true ) {
     case $::operatingsystem {
@@ -26,7 +30,7 @@ class redis::install (
         package { 'redis-server' : ensure => $redis_version, }
       }
       'Fedora', 'RedHat', 'CentOS', 'OEL', 'OracleLinux', 'Amazon', 'Scientific', 'SLES': {
-        package { 'redis' : ensure => $redis_version, }
+        package { 'redis' : ensure => $redis_version, install_options => $redis_yum_options, }
         # The SLES DatabaseServer repository installs a conflicting logrotation configuration
         if $::operatingsystem == 'SLES' {
           file { '/etc/logrotate.d/redis':
